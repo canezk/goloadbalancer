@@ -1,4 +1,4 @@
-package golangloadbalancer
+package main
 
 import (
 	"fmt"
