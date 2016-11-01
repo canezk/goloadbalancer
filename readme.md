@@ -21,6 +21,12 @@
 ```
 负责和zookeeper通信，注册watcher
 ```
+#### zookeeper golang client选择
+```
+gozk：https://wiki.ubuntu.com/gozk
+go-zookeeper：https://github.com/samuel/go-zookeeper
+后者文档和代码都是开源的
+```
 ### 一致性哈希
 ```
 根据从zookeeper上面读取的节点信息，进行一致性哈希
