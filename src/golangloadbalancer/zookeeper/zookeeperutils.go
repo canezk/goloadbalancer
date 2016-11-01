@@ -17,7 +17,7 @@ const timeOut  = 60
 func Connect(hosts []string) (conn *zk.Conn, err error)  {
 	conn, _, err = zk.Connect(hosts, timeOut*time.Second)
 	if err != nil {
-		fmt.Println("Connected failed to zookeeper!@" + err)
+		fmt.Println("Connected failed to zookeeper!@" , err)
 	}
 	return
 }
