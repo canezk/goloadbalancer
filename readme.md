@@ -18,6 +18,19 @@
 2、golang相关的常用组件可能会不够成熟相对于java而言
 ```
 
+### 主要目标
+```
+1、动态负载均衡
+2、对现有数据流透明
+```
+
+### 数据流
+```
+1、给下游服务提供api，注册（域名，znode信息）
+2、收到url之后，解析url，获取域名，读取对应的znode server信息
+3、一致性哈希url，然后请求对应的server
+```
+
 ## 主要模块
 ### client的connector
 ### zookeeper的connector
@@ -33,6 +46,7 @@ go-zookeeper：https://github.com/samuel/go-zookeeper
 ### 一致性哈希
 ```
 根据从zookeeper上面读取的节点信息，进行一致性哈希
+https://github.com/serialx/hashring 
 ```
 ### 降级策略
 ```
