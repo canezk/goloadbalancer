@@ -10,14 +10,18 @@ import (
 	"golangloadbalancer/consistenthash"
 )
 
+var connsistentHash consistenthash.Consistent
+
 func Listen(port int)  {
 	http.Handle("/", http.HandlerFunc(balanceHandler))
+	connsistentHash = new(consistenthash.Consistent)
+	connsistentHash.ZookeeperUrl = ""
 	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
 
 func balanceHandler(w http.ResponseWriter, req *http.Request)  {
 	url := req.URL
-	url.Host = consistenthash.GetCurrentRequestServer()
+	url.Host = connsistentHash.GetServer("", url)
 
 	proxyReq, err := http.NewRequest(req.Method, url.String(), req.Body)
 	if err != nil {
