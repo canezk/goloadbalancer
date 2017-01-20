@@ -14,6 +14,7 @@ type Consistent struct{
 	domainZnode map[string]string //域名和znode的映射关系
 	domainRing map[string]hashring.HashRing //domain及其对应的哈希环
 	conn *zk.Conn //zk的连接
+	zookeeperUrl []string //zookeeper的地址
 }
 
 func (c *Consistent)AddDomain(domain string, znode string) {
@@ -22,11 +23,22 @@ func (c *Consistent)AddDomain(domain string, znode string) {
 }
 
 func (c *Consistent)AddDomainServers(domain string, znode string)  {
+	state := zk.State(c.conn)
+	for state != zk.StateConnected {
+		c.conn, _ = zookeeper.Connect(c.zookeeperUrl)
+		state = zk.State(c.conn)
+	}
 	servers, err := zookeeper.GetServerList(c.conn, znode)
 	if err != nil {
 		log.Print("Add server of domain %s failed,caused by %v+\n", domain, err)
 		return
 	}
 	c.domainRing[domain] = hashring.New(servers)
+}
+
+func (c *Consistent)GetServer(domain string, key string) (server string) {
+	ring := c.domainRing[domain]
+	server,_ = ring.GetNode(key)
+	return
 }
 
